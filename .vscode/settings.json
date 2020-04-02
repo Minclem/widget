@@ -1,0 +1,13 @@
+{
+  "editor.tabSize": 2,
+  "files.autoGuessEncoding": false,
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.flutterRunLogFile": "./flutter.run.log",
+  "dart.flutterTestLogFile": "./flutter.test.log",
+  "dart.flutterDaemonLogFile": "./flutter.daemon.log",
+  "dart.closingLabels": true
+}

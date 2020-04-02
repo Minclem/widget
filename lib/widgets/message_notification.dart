@@ -34,7 +34,7 @@ class MessageNoticeOptions {
       this.onShow,
       this.onHide,
       this.position,
-      this.clearance,
+      this.clearance = 8,
       this.avatarIcon,
       this.noteLen = 2,
       this.duration = 300,
@@ -73,7 +73,7 @@ class MessageNotice {
       overlayState.insert(_overlayEntry);
 
       // 需要延迟确保创建组件完成后再进行显示
-      Timer(Duration(milliseconds: 10), _show);
+      Timer(Duration(milliseconds: 50), _show);
     } else {
       _show();
     }
@@ -140,15 +140,13 @@ class MessageNoticeState extends State<MessageNoticeElement> with SingleTickerPr
 
   @override
   void dispose() {
-    directClosure();
+    clean();
     super.dispose();
   }
 
   /// 显示消息提示
   void show(MessageNoticeOptions options) {
-    if (options.message == null && options.note == null && options.child == null) {
-      options.message = '您收到一条消息';
-    }
+    assert(options.message != null || options.note != null || options.child != null, '`message` At least one of `note` and `child` is not empty');
 
     if (options.position != 'top' && options.position != 'bottom') {
       options.position = 'top';
@@ -176,7 +174,7 @@ class MessageNoticeState extends State<MessageNoticeElement> with SingleTickerPr
   }
 
   /// 直接关闭
-  void directClosure () {
+  void clean () {
     _timer?.cancel();
     animationController.dispose();
     _animation = null;
@@ -258,7 +256,7 @@ class MessageNoticeState extends State<MessageNoticeElement> with SingleTickerPr
     return Positioned(
       top:  _options.position == 'top' ? mediaQuery.padding.top : null,
       bottom:  _options.position == 'bottom' ? mediaQuery.padding.bottom : null,
-      left: $rem(_options.clearance ?? 8),
+      left: $rem(_options.clearance),
       child: GestureDetector(
         onTap: () {
           hide();
@@ -279,6 +277,7 @@ class MessageNoticeState extends State<MessageNoticeElement> with SingleTickerPr
                   constraints: BoxConstraints(
                     maxWidth: $rem(375 - (_options.clearance * 2)),
                     maxHeight: mediaQuery.size.height / 2,
+                    minHeight: $rem(50),
                   ),
                   padding: _options.padding,
                   decoration: BoxDecoration(
